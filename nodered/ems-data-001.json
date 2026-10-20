@@ -1,0 +1,48 @@
+[
+  {
+    "timestamp": "2026-01-15T10:15:00",
+    "site": "Site X",
+    "building": "Gebouw A",
+    "asset_id": "ELEC-001",
+    "asset_type": "Energiemeter",
+    "parameter": "Elektriciteitsverbruik",
+    "value": 1256.4,
+    "unit": "kWh",
+    "source": "Johnson Controls"
+  },
+  {
+    "timestamp": "2026-01-15T10:15:00",
+    "site": "Site X",
+    "building": "Gebouw A",
+    "asset_id": "ELEC-001",
+    "asset_type": "Energiemeter",
+    "parameter": "Vermogen",
+    "value": 45.2,
+    "unit": "kW",
+    "source": "Johnson Controls"
+  },
+
+  {
+    "timestamp": "2026-01-15T10:15:00",
+    "site": "Site X",
+    "building": "Gebouw A",
+    "asset_id": "ELEC-001",
+    "asset_type": "Energiemeter",
+    "parameter": "Spanning",
+    "value": 400,
+    "unit": "V",
+    "source": "Johnson Controls"
+  },
+  {
+    "timestamp": "2026-01-15T10:15:00",
+    "site": "Site X",
+    "building": "Gebouw A",
+    "asset_id": "ELEC-001",
+    "asset_type": "Energiemeter",
+    "parameter": "Stroom",
+    "value": 65.3,
+    "unit": "A",
+    "source": "Johnson Controls"
+
+  }
+]
