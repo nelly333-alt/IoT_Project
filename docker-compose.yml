@@ -1,2 +1,51 @@
 services:
-  
+  postgres:
+    image: postgres:16
+    container_name: ems-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${TODO}
+      POSTGRES_PASSWORD: ${TODO}
+      POSTGRES_DB: ${TODO}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  nodered:
+    image: nodered/node-red:latest
+    container_name: ems-nodered
+    restart: unless-stopped
+    ports:
+      - "1880:1880"
+    volumes:
+      - nodered_data:/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ems-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${TODO}
+      GF_SECURITY_ADMIN_PASSWORD: ${TODO}
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  nodered_data:
+  grafana_data:
