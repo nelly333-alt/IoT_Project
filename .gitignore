@@ -2,3 +2,5 @@
 .idea/
 *.iml/
 data/
+mosquitto/data/
+homeassistant/config

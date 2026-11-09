@@ -4,14 +4,15 @@ services:
     container_name: ems-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: $postgres
-      POSTGRES_PASSWORD: $
-      POSTGRES_DB: $postgres
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Smartbuildings
+      - POSTGRES_DB=smartbuildings
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
@@ -44,15 +45,29 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ./homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: unless-stopped
+    stop_grace_period: 60s
+    privileged: true
+    network_mode: host
+    environment:
+      TZ: Europe/Amsterdam
 
-    mosquitto:
-      image: eclipse-mosquitto:2.1-alpine
-      ports:
-        - "1883:1883"
-      volumes:
-        - mosquitto/config:/mosquitto/config:ro
-        - mosquitto/data:/mosquitto/data
-      restart: unless-stopped
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:ro
+      - ./mosquitto/data:/mosquitto/data
+    restart: unless-stopped
 
   chirpstack:
     image: chirpstack/chirpstack:4
@@ -116,3 +131,4 @@ volumes:
   postgres_data:
   nodered_data:
   grafana_data:
+  redisdata:

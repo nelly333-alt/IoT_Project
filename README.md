@@ -12,8 +12,8 @@ Sensor en metadata verzameld, opgeslagen, gevisualiseerd en gerapporteerd, met h
 ### Datastroom in het kort
 
 1. **Sensoren** sturen hun meetwaarden via LoRa naar de LoRaWAN-gateway.
-2. De gateway stuurt de data door naar **The Things Network (TTN)**, dat de LoRaWAN-berichten beheert.
-3. **Node-RED** ontvangt de data van TTN via MQTT, decodeert en valideert ze en zet ze om naar het gemeenschappelijke dataformaat.
+2. De gateway stuurt de data door naar **The Things Network (TTN)/ Chirpstack**, dat de LoRaWAN-berichten beheert.
+3. **Node-RED** ontvangt de data van TTN/Chripstack via MQTT, decodeert en valideert ze en zet ze om naar het gemeenschappelijke dataformaat.
 4. **PostgreSQL** slaat de metingen op als buffer voor real-time gebruik en tijdreeksen.
 5. **Grafana** leest uit PostgreSQL voor operationele dashboards en alarmen.
 6. **MS Fabric** is het centrale warehouse; **Power BI** maakt daarop de management en EPBD-rapporten.
@@ -26,7 +26,7 @@ Elk heeft zijn eigen voordelen, daarom gebruiken we ze allebei.
 ### Scope van de PoC
 | Onderdeel | Status |
 |--- |---| 
-|LoRa-sensoren en ESP32 -> gateway -> TTN -> Node-RED -> PostgreSQL -> Grafana  | PoC |
+|LoRa-sensoren en ESP32 -> gateway -> Chirpstack/TTN -> Node-RED -> PostgreSQL -> Grafana  | PoC |
 |PostgreSQL -> Ms Fabric -> Power BI | PoC (afhankelijk van toegang tot de Fabric-testomgeving)|
 
 ## Dataformaat
@@ -66,9 +66,9 @@ Het script `database/init.sql` wordt automatisch uitgevoerd bij de eerste start.
 
 ## Team
 
-| Naam | Rol |
-|---|---|
-| [Kelvin] | [bv. hardware/firmware ESP32] |
-| [Nelly] | [bv. Node-RED en database] |
-| [Samuel] | [bv. Grafana en alerting] |
-| [Jesse-James] | [bv. Fabric en Power BI] |
+| Naam          |        Rol                    |
+|   ---         |        ---                    |
+| [Kelvin]      | [bv. hardware/firmware ESP32] |
+| [Nelly]       | [database en TimeScaleDB]     | 
+| [Samuel]      | [Grafana en Nodered]          |
+| [Jesse-James] | [Power BI]                    |
