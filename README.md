@@ -27,7 +27,7 @@ Elk heeft zijn eigen voordelen, daarom gebruiken we ze allebei.
 | Onderdeel | Status |
 |--- |---| 
 |LoRa-sensoren en ESP32 -> gateway -> Chirpstack/TTN -> Node-RED -> PostgreSQL -> Grafana  | PoC |
-|PostgreSQL -> Ms Fabric -> Power BI | PoC (afhankelijk van toegang tot de Fabric-testomgeving)|
+|PostgreSQL -> Ms Fabric -> Power BI | Uitbreiding|
 
 ## Dataformaat
 
