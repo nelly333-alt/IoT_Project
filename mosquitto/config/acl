@@ -1,8 +1,0 @@
-user admin
-topic readwrite #
-
-user nodered
-topic readwrite #
-
-user sensor
-topic write sensor/#
