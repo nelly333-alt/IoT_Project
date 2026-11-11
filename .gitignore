@@ -3,4 +3,13 @@
 *.iml/
 data/
 mosquitto/data/
-homeassistant/config
+homeassistant/configProvincie_Antwerpen_DB.iml
+
+# Home Assistant
+homeassistant/config/.storage/
+homeassistant/config/.cache/
+homeassistant/config/*.db
+homeassistant/config/*.log
+homeassistant/config/*.log.*
+homeassistant/config/.HA_VERSION
+homeassistant/config/.ha_run.lock

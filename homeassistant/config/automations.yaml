@@ -1,0 +1,16 @@
+- id: '1794223655949'
+  alias: Nieuwe automatisering
+  description: ''
+  triggers:
+  - trigger: time_pattern
+    seconds: /5
+  conditions: []
+  actions:
+  - action: mqtt.publish
+    data:
+      evaluate_payload: false
+      qos: '0'
+      retain: false
+      topic: /stekker/vermogen
+      payload: '{{states("sensor.hombli_smart_socket_vermogen")}}'
+  mode: single

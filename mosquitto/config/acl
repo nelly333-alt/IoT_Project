@@ -1,0 +1,11 @@
+
+# Only used once you switch the broker to authenticated access 
+
+user chirpstack
+topic readwrite #
+
+user nodered
+topic read application/#
+
+user sensor
+topic write sensor/#
