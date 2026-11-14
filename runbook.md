@@ -1,5 +1,8 @@
 
 Beste optie om alle services in een plaats te bewaren is deze commando op jouw localhost runnen:
+
+
+
 notepad $env:USERPROFILE\.ssh\config
    -> in de config file!!!
         |
