@@ -29,46 +29,12 @@ Elk heeft zijn eigen voordelen, daarom gebruiken we ze allebei.
 |LoRa-sensoren en ESP32 -> gateway -> Chirpstack/TTN -> Node-RED -> PostgreSQL -> Grafana  | PoC |
 |PostgreSQL -> Ms Fabric -> Power BI | Uitbreiding|
 
-## Dataformaat
-
-Alle bronnen worden naar hetzelfde formaat omgezet (tabel `ems_measurements`):
-
-| Veld | Omschrijving |
-|---|---|
-| `timestamp` | Datum en tijd van de meting |
-| `site` | Locatie of campus |
-| `building` | Gebouw of ruimte |
-| `asset_id` | Unieke identificatie van de sensor of meter |
-| `asset_type` | Type installatie of sensor |
-| `parameter` | Wat er gemeten wordt |
-| `value` | Meetwaarde |
-| `unit` | Eenheid (kWh, kW, °C, ppm, %, ...) |
-| `source` | Herkomst (LoRaWAN, Johnson Controls, E-Sight, ...) |
-
-Bewaartermijn volgens de business case: 
-minstens 5 jaar, de eerste 13 maanden op de oorspronkelijke granulariteit (elektriciteit kwartaaluur, andere meters uur), daarna maandelijks geaggregeerd.
-
-## De stack opstarten
-
-```bash
-docker compose up -d
-docker compose ps
-```
-
-| Dienst | Adres |
-|---|---|
-| Node-RED | http://localhost:1880 |
-| Grafana | http://localhost:3000 |
-| PostgreSQL | `localhost:5433` (binnen Docker: host `postgres`, poort `5432`) |
-
-Het script `database/init.sql` wordt automatisch uitgevoerd bij de eerste start. Wil je de database volledig resetten, gebruik dan `docker compose down -v` (verwijdert alle data).
-
 
 ## Team
 
-| Naam          |        Rol                    |
-|   ---         |        ---                    |
-| [Kelvin]      | [bv. hardware/firmware ESP32] |
-| [Nelly]       | [database en TimeScaleDB]     | 
-| [Samuel]      | [Grafana en Nodered]          |
-| [Jesse-James] | [Power BI]                    |
+| Naam          |        Rol                          |
+|   ---         |        ---                          |
+| [Kelvin]      | [hardware/firmware ESP32]           |
+| [Nelly]       | [database/TimeScaleDB en Ms Fabric] | 
+| [Samuel]      | [Grafana en Nodered]                |
+| [Jesse-James] | [Power BI]                          |
