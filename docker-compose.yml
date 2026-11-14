@@ -42,7 +42,10 @@ services:
           condition: service_healthy
 
   nodered:
-    image: nodered/node-red:latest
+    build:
+      context: ./nodered
+      dockerfile: Dockerfile
+    image: ems-nodered:local
     container_name: ems-nodered
     restart: unless-stopped
     ports:
@@ -52,7 +55,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-
   grafana:
     image: grafana/grafana:latest
     container_name: ems-grafana

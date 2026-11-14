@@ -496,17 +496,17 @@ LEFT JOIN LATERAL (
 -- (haal de commentaar weg om te proberen; voeg je echte ChirpStack DevEUI op dezelfde manier toe)
 -- =====================================================
 
--- INSERT INTO ems_buildings (site, building) VALUES
---     ('Site X','Gebouw A'), ('Site X','Vergaderzaal 2'),
---     ('Site X','Buitenomgeving'), ('Site X','Parking')
--- ON CONFLICT DO NOTHING;
---
--- INSERT INTO ems_assets (asset_id, site, building, asset_type, energy_carrier, expected_interval_minutes, source) VALUES
---     ('ELEC001',  'Site X','Gebouw A',       'Energiemeter', 'elektriciteit', 15, 'Johnson Controls'),
---     ('COMF101',  'Site X','Vergaderzaal 2', 'Comfortsensor', NULL,           15, 'LoRaWAN'),
---     ('PEIL-001', 'Site X','Buitenomgeving', 'Peilbuis',      NULL,           60, 'LoRaWAN'),
---     ('EV-023',   'Site X','Parking',        'Laadpaal',      NULL,           15, 'Laadpaalbeheer')
--- ON CONFLICT DO NOTHING;
+INSERT INTO ems_buildings (site, building) VALUES
+    ('Site X','Gebouw A'), ('Site X','Vergaderzaal 2'),
+    ('Site X','Buitenomgeving'), ('Site X','Parking')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO ems_assets (asset_id, site, building, asset_type, energy_carrier, expected_interval_minutes, source) VALUES
+    ('ELEC001',  'Site X','Gebouw A',       'Energiemeter', 'elektriciteit', 15, 'Johnson Controls'),
+    ('COMF101',  'Site X','Vergaderzaal 2', 'Comfortsensor', NULL,           15, 'LoRaWAN'),
+    ('PEIL-001', 'Site X','Buitenomgeving', 'Peilbuis',      NULL,           60, 'LoRaWAN'),
+    ('EV-023',   'Site X','Parking',        'Laadpaal',      NULL,           15, 'Laadpaalbeheer')
+ON CONFLICT DO NOTHING;
 
 -- =====================================================
 -- OPTIONEEL: aggregaten handmatig verversen (bv. na het importeren van oude data)

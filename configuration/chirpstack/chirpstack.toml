@@ -32,7 +32,7 @@
   #  * disable - Do not use TLS
   #  * prefer - Attempt to connect with TLS but allow sessions without
   #  * require - Require the use of TLS
-  dsn="postgresql://chirpstack:smartbuildings@postgres:5432/chirpstack?sslmode=disable"
+  dsn="postgresql://chirpstack:chirpstack@postgres:5432/chirpstack?sslmode=disable"
 
   # Max open connections.
   #
@@ -414,35 +414,22 @@
 
 
 # Global integration related configuration.
-[integration]
+  [integration]
+   enabled = [
+      "mqtt",
+   ]
 
-  # Enabled integrations (global).
-  enabled = [
-  ]
-
-  # MQTT integration configuration.
   [integration.mqtt]
+  event_topic="application/{{application_id}}/device/{{dev_eui}}/event/{{event}}"
 
-    # Event topic template.
-    event_topic="application/{{application_id}}/device/{{dev_eui}}/event/{{event}}"
+  command_topic="application/{{application_id}}/device/{{dev_eui}}/command/{{command}}"
 
-    # Command topic.
-    #
-    # This is the topic on which the MQTT subscribes for receiving (enqueue) commands.
-    command_topic="application/{{application_id}}/device/{{dev_eui}}/command/{{command}}"
+  json=true
 
-    # Use JSON encoding instead of Protobuf (binary).
-    json=true
+  server="tcp://mosquitto:1883/"
 
-    # MQTT server (e.g. scheme://host:port where scheme is tcp, ssl)
-    server="tcp://127.0.0.1:1883/"
-
-    # Connect with the given username (optional)
-    username=""
-
-    # Connect with the given password (optional)
-    password=""
-
+  username=""
+  password=""
     # Quality of service level
     #
     # 0: at most once
