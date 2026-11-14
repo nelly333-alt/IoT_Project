@@ -10,12 +10,11 @@ services:
       TZ: UTC
 
       CHIRPSTACK_DB_PASSWORD: ${CHIRPSTACK_DB_PASSWORD}
-      NODERED_DB_PASSWORD: $ {NODERED_DB_PASSWORD}
-      GRAFANA_DB_PASSWORD: $ {GRAFANA_DB_PASSWORD}
-      FABRIC_DB_PASSWORD: $ {FABRIC_DB_PASSWORD}
-
+      NODERED_DB_PASSWORD: ${NODERED_DB_PASSWORD}
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
+      FABRIC_DB_PASSWORD: ${FABRIC_DB_PASSWORD}
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./configuration/postgresql/initdb/10_chirpstack.sh:/docker-entrypoint-initdb.d/10_chirpstack.sh:ro
@@ -26,6 +25,21 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  pgadmin:
+      image: dpage/pgadmin4:latest
+      container_name: ems-pgadmin
+      restart: unless-stopped
+      environment:
+        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      ports:
+        - "127.0.0.1:5050:80"      # only reachable from the VM itself
+      volumes:
+        - pgadmin_data:/var/lib/pgadmin
+      depends_on:
+        postgres:
+          condition: service_healthy
 
   nodered:
     image: nodered/node-red:latest
@@ -142,3 +156,5 @@ volumes:
   nodered_data:
   grafana_data:
   redisdata:
+  pgadmin_data:
+
