@@ -53,6 +53,12 @@ pgAdmin4
        username: admin
        password: admin
 
+login smartbuildings database:
+docker exec -it ems-postgres psql -U admin -d smartbuildings
+
+\dt -> list tables
+\dm -> Continuous aggregates
+\dx -> Timescaledb
 
 
 

@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: timescale/timescaledb:latest-pg16
+    image: timescale/timescaledb:latest
     container_name: ems-postgres
     restart: unless-stopped
     environment:
@@ -14,47 +14,58 @@ services:
       GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
       FABRIC_DB_PASSWORD: ${FABRIC_DB_PASSWORD}
     ports:
-      - "127.0.0.1:5433:5432"
+      - "${POSTGRES_BIND:-127.0.0.1}:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./configuration/postgresql/initdb/10_chirpstack.sh:/docker-entrypoint-initdb.d/10_chirpstack.sh:ro
       - ./database/init.sql:/docker-entrypoint-initdb.d/20_ems_schema.sql:ro
       - ./database/roles.sh:/docker-entrypoint-initdb.d/30_roles.sh:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
 
   pgadmin:
-      image: dpage/pgadmin4:latest
-      container_name: ems-pgadmin
-      restart: unless-stopped
-      environment:
-        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-      ports:
-        - "127.0.0.1:5050:80"      # only reachable from the VM itself
-      volumes:
-        - pgadmin_data:/var/lib/pgadmin
-      depends_on:
-        postgres:
-          condition: service_healthy
+    image: dpage/pgadmin4:latest
+    container_name: ems-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "127.0.0.1:5050:80"      # only reachable from the VM itself
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   nodered:
     build:
       context: ./nodered
-      dockerfile: Dockerfile
+      args:
+        NODERED_TAG: ${NODERED_TAG:-4.0.5}
     image: ems-nodered:local
     container_name: ems-nodered
     restart: unless-stopped
+    environment:
+      TZ: UTC
+      POSTGRES_DB: ${POSTGRES_DB}
+      NODERED_DB_PASSWORD: ${NODERED_DB_PASSWORD}
+      NODERED_ADMIN_USER: ${NODERED_ADMIN_USER}
+      NODERED_ADMIN_HASH: ${NODERED_ADMIN_HASH}
+      NODERED_CREDENTIAL_SECRET: ${NODERED_CREDENTIAL_SECRET}
     ports:
-      - "1880:1880"
+      - "${UI_BIND:-127.0.0.1}:1880:1880"
     volumes:
-      - nodered_data:/data
+      - ./nodered/data:/data          # flows.json + settings.js live in git
     depends_on:
       postgres:
         condition: service_healthy
+      mosquitto:
+        condition: service_started
+
   grafana:
     image: grafana/grafana:latest
     container_name: ems-grafana
@@ -62,10 +73,13 @@ services:
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD}
     ports:
-      - "3000:3000"
+      - "${UI_BIND:-127.0.0.1}:3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -76,7 +90,6 @@ services:
     volumes:
       - ./homeassistant/config:/config
       - /etc/localtime:/etc/localtime:ro
-      - /run/dbus:/run/dbus:ro
     restart: unless-stopped
     stop_grace_period: 60s
     privileged: true

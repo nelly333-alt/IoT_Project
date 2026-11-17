@@ -153,7 +153,7 @@ ON ems_measurements (
 -- =====================================================
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS ems_hourly
-WITH (timescaledb.continuous) AS
+WITH (timescaledb.continuous, timescaledb.materialized_only = false) AS
 
 SELECT
     time_bucket(
@@ -196,7 +196,7 @@ WITH NO DATA;
 
 SELECT add_continuous_aggregate_policy(
     'ems_hourly',
-    start_offset      => INTERVAL '3 hours',
+    start_offset      => INTERVAL '2 days',   -- ruimte voor laat aankomende LoRa-data
     end_offset        => INTERVAL '1 hour',
     schedule_interval => INTERVAL '30 minutes',
     if_not_exists     => TRUE
@@ -208,7 +208,7 @@ SELECT add_continuous_aggregate_policy(
 -- =====================================================
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS ems_monthly
-WITH (timescaledb.continuous) AS
+WITH (timescaledb.continuous, timescaledb.materialized_only = false) AS
 
 SELECT
     time_bucket(
@@ -496,17 +496,17 @@ LEFT JOIN LATERAL (
 -- (haal de commentaar weg om te proberen; voeg je echte ChirpStack DevEUI op dezelfde manier toe)
 -- =====================================================
 
-INSERT INTO ems_buildings (site, building) VALUES
-    ('Site X','Gebouw A'), ('Site X','Vergaderzaal 2'),
-    ('Site X','Buitenomgeving'), ('Site X','Parking')
-ON CONFLICT DO NOTHING;
-
-INSERT INTO ems_assets (asset_id, site, building, asset_type, energy_carrier, expected_interval_minutes, source) VALUES
-    ('ELEC001',  'Site X','Gebouw A',       'Energiemeter', 'elektriciteit', 15, 'Johnson Controls'),
-    ('COMF101',  'Site X','Vergaderzaal 2', 'Comfortsensor', NULL,           15, 'LoRaWAN'),
-    ('PEIL-001', 'Site X','Buitenomgeving', 'Peilbuis',      NULL,           60, 'LoRaWAN'),
-    ('EV-023',   'Site X','Parking',        'Laadpaal',      NULL,           15, 'Laadpaalbeheer')
-ON CONFLICT DO NOTHING;
+-- INSERT INTO ems_buildings (site, building) VALUES
+--     ('Site X','Gebouw A'), ('Site X','Vergaderzaal 2'),
+--     ('Site X','Buitenomgeving'), ('Site X','Parking')
+-- ON CONFLICT DO NOTHING;
+--
+-- INSERT INTO ems_assets (asset_id, site, building, asset_type, energy_carrier, expected_interval_minutes, source) VALUES
+--     ('ELEC-001',  'Site X','Gebouw A',       'Energiemeter', 'elektriciteit', 15, 'Johnson Controls'),
+--     ('COMF101',  'Site X','Vergaderzaal 2', 'Comfortsensor', NULL,           15, 'LoRaWAN'),
+--     ('PEIL-001', 'Site X','Buitenomgeving', 'Peilbuis',      NULL,           60, 'LoRaWAN'),
+--     ('EV-023',   'Site X','Parking',        'Laadpaal',      NULL,           15, 'Laadpaalbeheer')
+-- ON CONFLICT DO NOTHING;
 
 -- =====================================================
 -- OPTIONEEL: aggregaten handmatig verversen (bv. na het importeren van oude data)

@@ -1,15 +1,31 @@
+# secrets / generated
 .env
-.idea/
-*.iml/
-data/
+mosquitto/config/passwd
+configuration/chirpstack/region_eu868.toml
+nodered/data/flows_cred.json
+
+# runtime data
+/data/
 mosquitto/data/
-homeassistant/configProvincie_Antwerpen_DB.iml
+nodered/data/node_modules/
+nodered/data/.npm/
+nodered/data/.config*.json
+nodered/data/.sessions.json
+nodered/data/*.backup
+nodered/data/lib/
+
+# IDE
+.idea/
+*.iml
 
 # Home Assistant
 homeassistant/config/.storage/
 homeassistant/config/.cache/
 homeassistant/config/*.db
+homeassistant/config/*.db-*
 homeassistant/config/*.log
 homeassistant/config/*.log.*
 homeassistant/config/.HA_VERSION
 homeassistant/config/.ha_run.lock
+homeassistant/config/secrets.yaml
+

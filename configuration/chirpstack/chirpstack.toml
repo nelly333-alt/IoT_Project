@@ -32,7 +32,7 @@
   #  * disable - Do not use TLS
   #  * prefer - Attempt to connect with TLS but allow sessions without
   #  * require - Require the use of TLS
-  dsn="postgresql://chirpstack:chirpstack@postgres:5432/chirpstack?sslmode=disable"
+  dsn="postgresql://chirpstack:smartbuilding@postgres:5432/chirpstack?sslmode=disable"
 
   # Max open connections.
   #
@@ -106,8 +106,8 @@
   #
   # Set multiple addresses when connecting to a cluster.
   servers=[
-    "redis://127.0.0.1/",
-  ]
+    "redis://redis/",
+  ]	
 
   # Redis Cluster.
   #
@@ -239,6 +239,7 @@
   # Multiple regions can be enabled simultaneously. Each region must match
   # the 'name' parameter of the region configuration in '[[regions]]'.
   enabled_regions=[
+	"eu868",
   ]
 
   # Time to wait for uplink de-duplication.
