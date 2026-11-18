@@ -37,4 +37,4 @@ Elk heeft zijn eigen voordelen, daarom gebruiken we ze allebei.
 | [Kelvin]      | [hardware/firmware ESP32]           |
 | [Nelly]       | [database/TimeScaleDB en Ms Fabric] | 
 | [Samuel]      | [Grafana en Nodered]                |
-| [Jesse-James] | [Power BI]                          |
+| [Jesse-James] | [Power BI en EPBD/BACS conformiteit]                          |
